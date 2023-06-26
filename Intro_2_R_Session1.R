@@ -1,8 +1,10 @@
-
 #Showing off! 
 a <- 25
 a*4
 A*4
+
+#Create a folder on your desktop called "Intro_2_R" and put streamDOC.csv in it
+
 # Set the working directory
 # Yours will look different than this! 
 #setwd("/Users/Quinn/Documents/R/Intro_2_R/")

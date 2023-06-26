@@ -2,127 +2,13 @@
 rm(list = ls())
 
 # Set the working directory
-setwd("/Users/Quinn/Documents/R/Intro_2R/")
+#setwd("/Users/Quinn/Documents/R/Intro_2R/")
 
 # Run your script
-source("Session1.R")
+#source("Intro_2_R_Session1.R")
 
 # List objects in workspace
 ls()
-
-# Assign values to x and y
-x <- streamDOC$Wet
-y <- streamDOC$logDOC
-
-# Plot y vs. x
-plot(x, y)
-
-# Add a title and axes labels
-plot(x, y, main = "Stream DOC as Function of Wetland Extent",
-     xlab = "Wetland Extent (fraction)", ylab = "log(DOC) (mg/L)")
-
-# Reassign x as percent wetland extent
-x <- streamDOC$prcntWet
-
-# Plot and change the title and x-label
-plot(x, y, main = "Stream DOC as Function of Wetland Extent",
-     xlab = "Wetland Extent (%)", ylab = "log(DOC) (mg/L)")
-
-# Run a linear regression
-reg1 <- lm(y ~ x)
-
-# Get the output summary of the linear regression
-summary(reg1)
-
-# Replot
-plot(x, y, main = "Stream DOC as Function of Wetland Extent",
-     xlab = "Wetland Extent (%)", ylab = "log(DOC) (mg/L)")
-
-# Add the regression line to the plot
-abline(reg1)
-
-# Plot data with an upstream lake
-x <- lake$prcntWet
-y <- lake$logDOC
-plot(x, y, pch = 16, col = "black", main = "Stream DOC as Function of Wetland Extent",
-     xlab = "Wetland Extent (%)", ylab = "log(DOC) (mg/L)")
-
-# Add points for data with no upstream lake
-x <- no.lake$prcntWet
-y <- no.lake$logDOC
-points(x, y, pch = 17, col = "grey")
-
-# Add a legend
-legend("topleft", legend = c("Lakes", "No Lakes"), pch = c(16, 17), col = c("black", "grey"))
-
-# Assign data.
-dat <- c( mean(lake$DOC), mean(no.lake$DOC))
-
-# Assign data names.
-dat.names <- c( "Lake", "No Lake")
-
-# Remove NA values and assign data
-dat <- c( mean( na.omit(lake$DOC) ), mean(no.lake$DOC))
-
-# Plot data and assign labels
-barplot(height = dat, names.arg = dat.names, main = "Stream DOC, With and Without an Upstream Lake",
-        ylab = "DOC (mg/L)")
-
-# Plot data and assign labels
-boxplot(streamDOC$DOC ~ streamDOC$Type, names = c ("Lake", "No Lake"),
-        main = "Stream DOC, With and Without an Upstream Lake", ylab = "DOC (mg/L)")
-
-# Assign values to x and y
-dist1 <- lake$DOC
-dist2 <- no.lake$DOC
-
-# Run the t-test
-t.test(dist1, dist2)
-
-# Assign average values of CWH relative to high and low landscape position
-low = c(82.5, 13.93) # Low landscape
-high = c(36.07, 20.36) # High landscape
-
-# Bind data along columns
-dat = cbind(low, high)
-
-# Name data
-dat.names = c("Low", "High")
-
-# Build barplot
-barplot(height = dat, names.arg = dat.names, 
-        ylab = "CWH (logs/km)", xlab = "Landscape Position", 
-        legend.text = c("Low Development", "High Development"))
-
-# Rebuild barplot
-barplot(height = dat, names.arg = dat.names, beside = TRUE, ylim = c(0, 100), 
-        ylab = "# logs/km", xlab = "Landscape Position", 
-        legend.text = c("Low Development", "High Development"))
-
-# Read in the data
-fishCR <- read.csv("fishCR.csv")
-
-# Look at the data structure
-str(fishCR)
-
-# Assign values to x and y for smelt data
-x <- fishCR$Year
-y <- fishCR$RS_per_year
-
-# Plot smelt time series
-plot(x, y, type = "l", col = "blue", main = "Crystal Lake Smelt and Perch Populations",
-     ylab = "Catch (#)", xlab = "Year")
-
-# Assign values to x and y for perch data
-x <- fishCR$Year
-y <- fishCR$YP_per_year
-
-# Add the perch line series
-lines(fishCR$Year, fishCR$YP_per_year, col = "red")
-
-# Add a legend.
-legend("topleft", legend = c("Rainbow Smelt", "Yellow Perch"), 
-       col = c("blue","red"), lty = 1, bty = "n")
 
 #install GG plot (you only need to do this once! Like ever!)
 install.packages(ggplot2)
@@ -140,6 +26,109 @@ ggplot1 <- ggplot(data = streamDOC, aes( x = prcntWet, y=logDOC, fill=Type)) +
 
 #Plot it 
 ggplot1
+
+#Let's take a look at a dataframe already present in R 
+mpg
+?mpg
+
+#Let's plot some data! 
+ggplot(data = mpg) + 
+  geom_point(mapping = aes(x = displ, y = hwy)) +
+  labs(x='Engine size (liters)',y='Miles per gallon')
+
+#Look at those funny points that have high engine size but also higher MPG
+#Hypothesize about why those may be have higher MPG. What can we do to test this hypothesis? 
+ggplot(data = mpg) + 
+  geom_point(mapping = aes(x = displ, y = hwy, color = class)) +
+  labs(x='Engine size (liters)',y='Miles per gallon')
+
+#Let's make the points relative to the size of the cars 
+ggplot(data = mpg) + 
+  geom_point(mapping = aes(x = displ, y = hwy, size = class)) +
+  labs(x='Engine size (liters)',y='Miles per gallon')
+
+#Other ways to play around with this:
+
+#Transparency 
+ggplot(data = mpg) + 
+  geom_point(mapping = aes(x = displ, y = hwy, alpha = class)) +
+  labs(x='Engine size (liters)',y='Miles per gallon')
+#oof, this one isn't super helpful 
+
+#Different shapes
+ggplot(data = mpg) + 
+  geom_point(mapping = aes(x = displ, y = hwy, shape = class))+
+  labs(x='Engine size (liters)',y='Miles per gallon')
+#Uh oh! R won't plot over 6 different shapes unless you manually input this 
+
+#Let's look at another way to convey these data 
+#Using facets, wrap by class of vehicle 
+ggplot(data = mpg) + 
+  geom_point(mapping = aes(x = displ, y = hwy)) + 
+  facet_wrap(~ class, nrow = 2) +
+  labs(x='Engine size (liters)',y='Miles per gallon')
+
+#Let's double facet
+ggplot(data = mpg) + 
+  geom_point(mapping = aes(x = displ, y = hwy)) + 
+  facet_grid(drv ~ cyl) +
+  labs(x='Engine size (liters)',y='Miles per gallon')
+#There's a lot of numbers getting thrown around here, let's make things nicer 
+drv_labs <- c("4-wheel", "front-wheel", "rear-wheel")
+names(drv_labs) <- c("4", "f", "r")
+
+ggplot(data = mpg) + 
+  geom_point(mapping = aes(x = displ, y = hwy)) + 
+  facet_grid(drv ~ cyl, labeller = labeller(drv = drv_labs)) +
+  labs(x='Engine size (liters)',y='Miles per gallon') 
+
+#Different geoms
+ggplot(data = mpg) + 
+  geom_point(mapping = aes(x = displ, y = hwy)) +
+  labs(x='Engine size (liters)',y='Miles per gallon') 
+
+ggplot(data = mpg) + 
+  geom_smooth(mapping = aes(x = displ, y = hwy)) +
+  labs(x='Engine size (liters)',y='Miles per gallon') 
+
+#Setting the line type of a geom_smooth argument
+ggplot(data = mpg) + 
+  geom_smooth(mapping = aes(x = displ, y = hwy, linetype = drv)) +
+  labs(x='Engine size (liters)',y='Miles per gallon') 
+
+#Let's change this to drive train by color
+ggplot(data = mpg) +
+  geom_smooth(mapping = aes(x = displ, y = hwy, color = drv)) +
+  labs(x='Engine size (liters)',y='Miles per gallon')
+
+#Now let's overlay some points
+ggplot(data = mpg) +
+  geom_smooth(mapping = aes(x = displ, y = hwy, color = drv)) +
+  geom_point(mapping = aes(x = displ, y = hwy)) +
+  labs(x='Engine size (liters)',y='Miles per gallon')
+
+#Now let's shift into MAXIMUM OVERDRIVE
+ggplot(data = mpg) +
+  geom_smooth(mapping = aes(x = displ, y = hwy, color = drv)) +
+  geom_point(mapping = aes(x = displ, y = hwy, color = drv)) +
+  labs(x='Engine size (liters)',y='Miles per gallon')
+
+#Overall trend with class 
+ggplot(data = mpg, mapping = aes(x = displ, y = hwy)) + 
+  geom_point(mapping = aes(color = class)) + 
+  geom_smooth() +
+  labs(x='Engine size (liters)',y='Miles per gallon')
+
+#Last thing with this dataset, lets look at box plots 
+ggplot(data = mpg, mapping = aes(x = class, y = hwy)) + 
+  geom_boxplot() +
+  labs(x='Miles per gallon',y='Class of vehicle')
+
+
+ggplot(data = mpg, mapping = aes(x = class, y = hwy)) + 
+  geom_boxplot() +
+  coord_flip() +
+  labs(y='Miles per gallon',x='Class of vehicle')
 
 #There's so much you can do with ggplot and R as a whole, this has served as a brief introduction to some of the basics
 #I hope this has been helpful! -Q
