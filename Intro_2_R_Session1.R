@@ -1,6 +1,11 @@
+
+#Showing off! 
+a <- 25
+a*4
+A*4
 # Set the working directory
 # Yours will look different than this! 
-#setwd("/Users/Quinn/Documents/R/Intro_2R/")
+#setwd("/Users/Quinn/Documents/R/Intro_2_R/")
 
 # Load data
 streamDOC <- read.csv("streamDOC.csv")
@@ -44,7 +49,7 @@ logDOC <- log(streamDOC$DOC)
 # Log transform the data and append to the data frame
 streamDOC$logDOC <- logDOC
 
-# Check that the operation was sucessful.
+# Check that the operation was successful.
 head(streamDOC)
 
 # Convert fraction wetland to percent wetland, append to the streamDOC data frame with column name "prcntWet".
@@ -60,3 +65,71 @@ no.lake <- streamDOC[streamDOC$Type == "No_Lake", ]
 # Write streamDOC to data file "streamDOC_V2"
 write.csv(streamDOC,"streamDOC_V2.csv")
 
+# Assign values to x and y
+x <- streamDOC$Wet
+y <- streamDOC$logDOC
+
+# Plot y vs. x
+plot(x, y)
+
+# Add a title and axes labels
+plot(x, y, main = "Stream DOC as Function of Wetland Extent",
+     xlab = "Wetland Extent (fraction)", ylab = "log(DOC) (mg/L)")
+
+# Reassign x as percent wetland extent
+x <- streamDOC$prcntWet
+
+# Plot and change the title and x-label
+plot(x, y, main = "Stream DOC as Function of Wetland Extent",
+     xlab = "Wetland Extent (%)", ylab = "log(DOC) (mg/L)")
+
+# Run a linear regression
+reg1 <- lm(y ~ x)
+
+# Get the output summary of the linear regression
+summary(reg1)
+
+# Replot
+plot(x, y, main = "Stream DOC as Function of Wetland Extent",
+     xlab = "Wetland Extent (%)", ylab = "log(DOC) (mg/L)")
+
+# Add the regression line to the plot
+abline(reg1)
+
+# Plot data with an upstream lake
+x <- lake$prcntWet
+y <- lake$logDOC
+plot(x, y, pch = 16, col = "black", main = "Stream DOC as Function of Wetland Extent",
+     xlab = "Wetland Extent (%)", ylab = "log(DOC) (mg/L)")
+
+# Add points for data with no upstream lake
+x <- no.lake$prcntWet
+y <- no.lake$logDOC
+points(x, y, pch = 17, col = "grey")
+
+# Add a legend
+legend("topleft", legend = c("Lakes", "No Lakes"), pch = c(16, 17), col = c("black", "grey"))
+
+# Assign data.
+dat <- c( mean(lake$DOC), mean(no.lake$DOC))
+
+# Assign data names.
+dat.names <- c( "Lake", "No Lake")
+
+# Remove NA values and assign data
+dat <- c( mean( na.omit(lake$DOC) ), mean(no.lake$DOC))
+
+# Plot data and assign labels
+barplot(height = dat, names.arg = dat.names, main = "Stream DOC, With and Without an Upstream Lake",
+        ylab = "DOC (mg/L)")
+
+# Plot data and assign labels
+boxplot(streamDOC$DOC ~ streamDOC$Type, names = c ("Lake", "No Lake"),
+        main = "Stream DOC, With and Without an Upstream Lake", ylab = "DOC (mg/L)")
+
+# Assign values to x and y
+dist1 <- lake$DOC
+dist2 <- no.lake$DOC
+
+# Run the t-test
+t.test(dist1, dist2)

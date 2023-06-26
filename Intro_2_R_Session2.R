@@ -124,7 +124,7 @@ lines(fishCR$Year, fishCR$YP_per_year, col = "red")
 legend("topleft", legend = c("Rainbow Smelt", "Yellow Perch"), 
        col = c("blue","red"), lty = 1, bty = "n")
 
-#install GG plot (you only need to do this once! Like ever! )
+#install GG plot (you only need to do this once! Like ever!)
 install.packages(ggplot2)
 
 #Activate it in R (you need to do this everytime you boot up R if you're going to be using any package)
