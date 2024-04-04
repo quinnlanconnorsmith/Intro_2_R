@@ -1,16 +1,24 @@
+####Session 1 Begin####
+
 #Showing off! 
 a <- 25
 a*4
 A*4
+#Note that R is case sensitive! 
+
+####Creating a working directory####
 
 #Create a folder on your desktop called "Intro_2_R" and put streamDOC.csv in it
 
 # Set the working directory
 # Yours will look different than this! 
 #setwd("/Users/Quinn/Documents/R/Intro_2_R/")
+#You can also manually set the working directory using the session tab above (this might be easier)
 
 # Load data
 streamDOC <- read.csv("streamDOC.csv")
+
+####Explore the Data####
 
 # Get the structure of the data frame
 str(streamDOC)
@@ -45,6 +53,8 @@ streamDOC$Wet
 # Get "DOC"
 streamDOC$DOC
 
+####Transform the Data####
+
 # Log transform the data and assign
 logDOC <- log(streamDOC$DOC)
 
@@ -67,6 +77,8 @@ no.lake <- streamDOC[streamDOC$Type == "No_Lake", ]
 # Write streamDOC to data file "streamDOC_V2"
 write.csv(streamDOC,"streamDOC_V2.csv")
 
+####Plot the Data####
+
 # Assign values to x and y
 x <- streamDOC$Wet
 y <- streamDOC$logDOC
@@ -79,6 +91,7 @@ plot(x, y, main = "Stream DOC as Function of Wetland Extent",
      xlab = "Wetland Extent (fraction)", ylab = "log(DOC) (mg/L)")
 
 # Reassign x as percent wetland extent
+#Note that this overwrites the previous x variable! 
 x <- streamDOC$prcntWet
 
 # Plot and change the title and x-label
@@ -129,9 +142,13 @@ barplot(height = dat, names.arg = dat.names, main = "Stream DOC, With and Withou
 boxplot(streamDOC$DOC ~ streamDOC$Type, names = c ("Lake", "No Lake"),
         main = "Stream DOC, With and Without an Upstream Lake", ylab = "DOC (mg/L)")
 
+####Run some stats!####
+
 # Assign values to x and y
 dist1 <- lake$DOC
 dist2 <- no.lake$DOC
 
 # Run the t-test
 t.test(dist1, dist2)
+
+####Let's load up ggplot####
