@@ -17,11 +17,11 @@ A * 4
 
 # Create a folder on your desktop called "Intro_2_R"
 # Put your largemouth bass data file in it
-# For example, your file is called "camp_lmb_lw.csv"
+# For example, this file is called "camp_lmb_lw.csv"
 
 # Set the working directory
 # Yours will look different than this!
-#Yours may look something like: 
+# It may look something like: 
 # setwd("/Users/Quinn/Desktop/Intro_2_R/")	
 # setwd("~/Desktop/Intro_2_R")
 
@@ -119,7 +119,7 @@ camp_lmb_lw$log_weight <- log(camp_lmb_lw$weight_g)
 # Create a log-transformed length column
 camp_lmb_lw$log_length <- log(camp_lmb_lw$length_mm)
 
-# Make year a factor so as to treat it like a category
+# Make year a factor so as to treat it like a category instead of an integer
 camp_lmb_lw$year <- as.factor(camp_lmb_lw$year)
 
 # Make a new basin column with nicer labels for plotting later
@@ -209,7 +209,7 @@ ggplot(data = camp_lmb_lw) +
        title = "Are fish longer in one year?") +
   theme_minimal()
 
-
+#Let's put some individual points on there! 
 ggplot(data = camp_lmb_lw) +
   geom_boxplot(mapping = aes(x = year, y = length_mm)) +
   geom_jitter(mapping = aes(x = year, y = length_mm, color = year),
